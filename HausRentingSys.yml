@@ -1,0 +1,38 @@
+name: HausRentSystem
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+
+  build-and-test:
+    name: Build and Test
+    runs-on: windows-latest  # For a list of available runner types, refer to
+
+   
+    steps:
+    - name: Run actions/checkout@v4
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    # Install the .NET Core workload
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+
+    # Restore dependencies
+    - name: Restore dependencies
+      run: dotnet restore
+
+    # Build application
+    - name: Build application
+      run: dotnet build --no-restore
+
+    # Run tests
+    - name: Run tests
+      run: dotnet test --no-build --verbosity normal
